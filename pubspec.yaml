@@ -1,0 +1,35 @@
+name: 'general_payment_project'
+description: 'A sample command-line application.'
+version: '0.0.0'
+repository: 'https://github.com/{main_username_owner}/general_payment'
+homepage: 'https://github.com/{main_username_owner}/general_payment'
+issue_tracker: 'https://github.com/{main_username_owner}/general_payment/issues'
+documentation: 'https://github.com/{main_username_owner}/general_payment/tree/main/docs'
+funding: 
+  - 'https://github.com/sponsors/{main_username_owner}'
+  - 'https://github.com/sponsors/azkadev'
+  - 'https://github.com/sponsors/generalfoss'
+platforms: 
+  android: null
+  ios: null
+  linux: null
+  macos: null
+  web: null
+  windows: null
+environment: 
+  sdk: '>=3.3.3 <4.0.0'
+dependencies: 
+  general_lib: '^0.0.44'
+  mason_logger: '^0.2.15'
+  packagex: '^0.0.59'
+  path: '^1.9.0'
+  universal_io: '^2.2.2'
+  yaml: '^3.1.2'
+  yaml_edit: '^2.2.0'
+  yaml_writer: '^2.0.0'
+dev_dependencies: 
+  lints: '^4.0.0'
+  test: '^1.25.8'
+publish_to: 'none'
+dependency_overrides: 
+  pointycastle: '3.8.0'
