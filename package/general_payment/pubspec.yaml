@@ -5,11 +5,11 @@ environment:
   sdk: '>=3.3.3 <4.0.0'
 dependencies: 
   path: '^1.9.0'
-  general_lib: '^0.0.44'
+  general_lib: '^0.0.46'
   http: '^1.1.2'
 dev_dependencies: 
   lints: '^4.0.0'
-  test: '^1.25.8'
+  test: 'any'
 dependency_overrides: 
   pointycastle: '3.8.0'
 funding: 
