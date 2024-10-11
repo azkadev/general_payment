@@ -7,9 +7,12 @@ extension XenditExtensioncreatePayOutLink on Xendit {
     required String external_id,
     required int amount,
     required String email,
+      required String xenditApiKey,
+
   }) async {
     return await invokeBuilder(
       endpoint: "POST https://api.xendit.co/payouts",
+      xenditApiKey: xenditApiKey,
       headers: {
         "for-user-id": forUserId,
       },

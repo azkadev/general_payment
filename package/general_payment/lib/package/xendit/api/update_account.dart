@@ -7,9 +7,12 @@ extension XenditExtensionupdateAccount on Xendit {
     required String email,
     required String bussiness_name,
     Map<String, String>? headers,
+      required String xenditApiKey,
+
   }) async {
     return await invokeBuilder(
       endpoint: "PATCH https://api.xendit.co/v2/accounts/{id}",
+      xenditApiKey: xenditApiKey,
       parameters: {
         "email": email,
         "public_profile": {

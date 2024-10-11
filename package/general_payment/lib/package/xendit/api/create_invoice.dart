@@ -26,6 +26,8 @@ extension XenditExtensionCreateInvoice on Xendit {
     List? items,
     List? fees,
     bool? should_authenticate_credit_card,
+      required String xenditApiKey,
+
     Map<String, String>? headers,
   }) async {
     final Map jsonData = {
@@ -52,6 +54,7 @@ extension XenditExtensionCreateInvoice on Xendit {
     };
     return await invokeBuilder(
       endpoint: "POST https://api.xendit.co/v2/invoices",
+      xenditApiKey: xenditApiKey,
       headers: {
         "for-user-id": forUserId,
         "with-fee-rule": withFeeRule,

@@ -24,3 +24,5 @@ macos/Flutter/ephemeral
 windows/ephemeral
 tmp/
 temp/
+
+bin/

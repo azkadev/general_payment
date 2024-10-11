@@ -43,12 +43,10 @@ import 'package:general_payment/package/xendit/extension/map.dart';
 import 'package:general_payment/package/xendit/scheme/respond_scheme/respond_scheme.dart';
 
 /// xendit helo world heo gais
-class Xendit {
-  final String xendit_api_key;
+class Xendit { 
   late final Client http_client;
 
-  Xendit({
-    required this.xendit_api_key,
+  Xendit({ 
     Client? httpClient,
   }) {
     if (httpClient == null) {
@@ -126,7 +124,7 @@ class Xendit {
     Map? parameters,
     Map<String, String>? headers,
     Map<String, String>? queryParameters,
-    String? xenditApiKey,
+    required String xenditApiKey,
     Client? httpClient,
     String specialTypeSucces = "ok",
   }) async {
@@ -135,7 +133,7 @@ class Xendit {
       parameters: parameters ?? {},
       headers: headers ?? {},
       queryParameters: queryParameters ?? {},
-      xenditApiKey: xenditApiKey ?? xendit_api_key,
+      xenditApiKey: xenditApiKey,
       httpClient: httpClient ?? http_client,
       specialTypeSucces: specialTypeSucces,
     );
@@ -147,7 +145,7 @@ class Xendit {
     Map? parameters,
     Map<String, String>? headers,
     Map<String, String>? queryParameters,
-    String? xenditApiKey,
+    required String xenditApiKey,
     Client? httpClient,
     String specialTypeSucces = "ok",
     required FutureOr<T> Function(Map result) onResult,
@@ -168,6 +166,8 @@ class Xendit {
     required int amount,
     required String source_user_id,
     required String destination_user_id,
+      required String xenditApiKey,
+
     Map<String, String>? headers,
   }) async {
     return await invokeBuilder(
@@ -179,6 +179,7 @@ class Xendit {
         "destination_user_id": destination_user_id,
       },
       headers: headers,
+      xenditApiKey: xenditApiKey,
       onResult: (result) {
         return TransactionBalanceAccount(result);
       },
@@ -188,10 +189,13 @@ class Xendit {
   Future<TransactionBalanceAccount> getTransferBalanceAccount({
     required String reference,
     Map<String, String>? headers,
+      required String xenditApiKey,
+
   }) async {
     return await invokeBuilder(
       endpoint: "GET https://api.xendit.co/transfers/reference=${reference}",
       headers: headers,
+      xenditApiKey: xenditApiKey,
       onResult: (result) {
         return TransactionBalanceAccount(result);
       },
@@ -202,6 +206,8 @@ class Xendit {
     required String name,
     required String description,
     required List<Map> routes,
+      required String xenditApiKey,
+
     Map<String, String>? headers,
   }) async {
     final Map jsonData = {
@@ -213,6 +219,7 @@ class Xendit {
       endpoint: "POST https://api.xendit.co/fee_rules",
       parameters: jsonData,
       headers: headers,
+      xenditApiKey: xenditApiKey,
       onResult: (result) {
         return TransactionBalanceAccount(result);
       },

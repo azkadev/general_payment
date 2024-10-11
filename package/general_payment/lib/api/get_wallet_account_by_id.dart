@@ -20,7 +20,7 @@ extension GeneralPaymentExtensiongetWalletAccountbyId on GeneralPayment {
             email: "owner@gmail.com",
           );
         }
-        final account = await xendit.getAccount(id: wallet_id);
+        final account = await xendit.getAccount(id: wallet_id, xenditApiKey: generalPaymentAuth.apiKey,);
         return Account(account.toJson());
       },
       onMidtrans: (generalPaymentAuth) {

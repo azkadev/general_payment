@@ -14,6 +14,7 @@ extension GeneralPaymentExtensiongetInvoice on GeneralPayment {
       generalPaymentAuth: generalPaymentAuth,
       onXendit: (generalPaymentAuth) async {
         final result = await xendit.getInvoice(
+          xenditApiKey: generalPaymentAuth.apiKey,
           forUserId: forUserId,
           invoice_id: invoice_id,
         );

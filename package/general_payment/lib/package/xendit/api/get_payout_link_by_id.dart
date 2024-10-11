@@ -5,9 +5,12 @@ extension XenditExtensiongetPayOutLinkById on Xendit {
   Future<PayOutLink> getPayOutLinkById({
     String forUserId = "",
     required String id,
+      required String xenditApiKey,
+
   }) async {
     return await invokeBuilder(
       endpoint: "GET https://api.xendit.co/payouts/$id",
+      xenditApiKey: xenditApiKey,
       headers: {
         "for-user-id": forUserId,
       },

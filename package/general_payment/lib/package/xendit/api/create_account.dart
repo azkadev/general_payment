@@ -6,10 +6,13 @@ extension XenditExtensioncreateAccount on Xendit {
     required String email,
     required String type,
     required String bussiness_name,
+      required String xenditApiKey,
+
     Map<String, String>? headers,
   }) async {
     return await invokeBuilder(
       endpoint: "POST https://api.xendit.co/v2/accounts",
+      xenditApiKey: xenditApiKey,
       parameters: {
         "email": email,
         "type": type,

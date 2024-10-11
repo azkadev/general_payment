@@ -35,6 +35,7 @@ extension GeneralPaymentExtensionCreateInvoice on GeneralPayment {
       generalPaymentAuth: generalPaymentAuth,
       onXendit: (generalPaymentAuth) async {
         final result = await xendit.createInvoice(
+          xenditApiKey: generalPaymentAuth.apiKey,
           external_id: external_id,
           amount: amount,
           forUserId: forUserId,
