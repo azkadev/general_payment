@@ -26,8 +26,7 @@ extension XenditExtensionCreateInvoice on Xendit {
     List? items,
     List? fees,
     bool? should_authenticate_credit_card,
-      required String xenditApiKey,
-
+    required String xenditApiKey,
     Map<String, String>? headers,
   }) async {
     final Map jsonData = {
@@ -62,6 +61,9 @@ extension XenditExtensionCreateInvoice on Xendit {
       },
       parameters: jsonData,
       onResult: (result) {
+        if (result["@type"] == "ok") {
+          result["@type"] = "invoice";
+        }
         return Invoice(result);
       },
     );

@@ -34,7 +34,7 @@ class GeneralPayment {
     if (is_payment_gateway_initialized) {
       return;
     }
-    xendit = Xendit( 
+    xendit = Xendit(
       httpClient: httpClient,
     );
     is_payment_gateway_initialized = true;

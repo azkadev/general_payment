@@ -5,8 +5,7 @@ extension XenditExtensionGetInvoice on Xendit {
   Future<Invoice> getInvoice({
     String forUserId = "",
     required String invoice_id,
-      required String xenditApiKey,
-
+    required String xenditApiKey,
   }) async {
     return await invokeBuilder(
       endpoint: "GET https://api.xendit.co/v2/invoices/$invoice_id",
@@ -15,6 +14,9 @@ extension XenditExtensionGetInvoice on Xendit {
         "for-user-id": forUserId,
       },
       onResult: (result) async {
+        if (result["@type"] == "ok") {
+          result["@type"] = "invoice";
+        }
         return Invoice(result);
       },
     );
