@@ -7,10 +7,11 @@ extension XenditExtensioncreatePayOutLink on Xendit {
     required String external_id,
     required int amount,
     required String email,
-      required String xenditApiKey,
-
-  }) async {
-    return await invokeBuilder(
+    required String xenditApiKey,
+  }) async { 
+    return await invokeRaw<PayOutLink>(
+      parameters: XenditInvokeParameters(
+        
       endpoint: "POST https://api.xendit.co/payouts",
       xenditApiKey: xenditApiKey,
       headers: {
@@ -21,9 +22,13 @@ extension XenditExtensioncreatePayOutLink on Xendit {
         "amount": amount,
         "email": email,
       },
-      onResult: (result) {
-        return PayOutLink(result);
-      },
+        queryParameters: {},
+        specialTypeSucces: "payOutLink",
+        isThrowOnError: false,
+        builder: (result) {
+          return PayOutLink(result);
+        },
+      ),
     );
   }
 }

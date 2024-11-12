@@ -10,7 +10,7 @@ extension GeneralPaymentExtensiongetWalletAccountbyId on GeneralPayment {
     bool isOwned = true,
     required GeneralPaymentAuth generalPaymentAuth,
   }) async {
-    return await invokeBuilder(
+    return await paymentInvokeBuilder(
       generalPaymentAuth: generalPaymentAuth,
       onXendit: (generalPaymentAuth) async {
         final String wallet_id = (isOwned) ? "" : walletId ?? "";
@@ -20,7 +20,10 @@ extension GeneralPaymentExtensiongetWalletAccountbyId on GeneralPayment {
             email: "owner@gmail.com",
           );
         }
-        final account = await xendit.getAccount(id: wallet_id, xenditApiKey: generalPaymentAuth.apiKey,);
+        final account = await xendit.getAccount(
+          id: wallet_id,
+          xenditApiKey: generalPaymentAuth.apiKey,
+        );
         return Account(account.toJson());
       },
       onMidtrans: (generalPaymentAuth) {

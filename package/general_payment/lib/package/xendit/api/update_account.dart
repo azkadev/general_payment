@@ -7,10 +7,12 @@ extension XenditExtensionupdateAccount on Xendit {
     required String email,
     required String bussiness_name,
     Map<String, String>? headers,
-      required String xenditApiKey,
-
-  }) async {
-    return await invokeBuilder(
+    required String xenditApiKey,
+  }) async { 
+    
+    return await invokeRaw(
+      parameters: XenditInvokeParameters(
+        
       endpoint: "PATCH https://api.xendit.co/v2/accounts/{id}",
       xenditApiKey: xenditApiKey,
       parameters: {
@@ -20,9 +22,14 @@ extension XenditExtensionupdateAccount on Xendit {
         },
       },
       headers: headers,
-      onResult: (result) {
+      builder: (result) {
         return Account(result);
       },
+        specialTypeSucces: "account",
+
+        queryParameters: {},
+        isThrowOnError: false,
+      ),
     );
   }
 }

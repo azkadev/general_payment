@@ -5,18 +5,23 @@ extension XenditExtensiongetPayOutLinkById on Xendit {
   Future<PayOutLink> getPayOutLinkById({
     String forUserId = "",
     required String id,
-      required String xenditApiKey,
-
-  }) async {
-    return await invokeBuilder(
+    required String xenditApiKey,
+  }) async { 
+    return await invokeRaw(
+      parameters: XenditInvokeParameters(
       endpoint: "GET https://api.xendit.co/payouts/$id",
       xenditApiKey: xenditApiKey,
       headers: {
         "for-user-id": forUserId,
       },
-      onResult: (result) {
+      builder: (result) {
         return PayOutLink(result);
       },
+        specialTypeSucces: "payOutLink",
+        parameters: {},
+        queryParameters: {},
+        isThrowOnError: false,
+      ),
     );
   }
 }

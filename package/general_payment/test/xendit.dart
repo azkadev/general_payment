@@ -32,9 +32,12 @@ Bukan maksud kami menipu itu karena harga yang sudah di kalkulasi + bantuan tiba
 
 
 <!-- END LICENSE --> */
+import 'package:general_payment/general_payment.dart';
 import 'package:general_payment/package/xendit/xendit.dart';
 
 void main() async {
+  GeneralPayment generalPayment = GeneralPayment();
+  generalPayment.ensureInitialized();
   Xendit xendit = Xendit(xendit_api_key: "xnd_development_rVgN5g1FbAj3zBeGPrFTZ81mJsNINY2lvLWNWeKHTJlBKtysWGnVYx0ltyv43s");
   var res = await xendit.invoke(
     endpoint: "POST https://api.xendit.co/v2/invoices",
@@ -51,5 +54,4 @@ void main() async {
   );
 
   print(res);
-  
 }

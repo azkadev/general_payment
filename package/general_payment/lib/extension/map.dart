@@ -1,7 +1,9 @@
 
-extension XenditExtensionMap on Map {
+// ignore_for_file: empty_catches
+
+extension GeneralPaymentExtensionOnMap on Map {
   /// delete value nulls on map
-  void extension_xendit_removeValueEmptyOrNull() {
+  void extension_general_payment_removeValueEmptyOrNull() {
     removeWhere((key, value) {
       try {
         if (value == null) {

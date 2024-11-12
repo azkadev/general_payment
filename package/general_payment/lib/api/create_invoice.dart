@@ -31,7 +31,7 @@ extension GeneralPaymentExtensionCreateInvoice on GeneralPayment {
     Map<String, String>? headers,
     required GeneralPaymentAuth generalPaymentAuth,
   }) async {
-    return await invokeBuilder(
+    return await paymentInvokeBuilder(
       generalPaymentAuth: generalPaymentAuth,
       onXendit: (generalPaymentAuth) async {
         final result = await xendit.createInvoice(

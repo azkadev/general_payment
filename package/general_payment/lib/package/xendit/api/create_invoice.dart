@@ -29,43 +29,44 @@ extension XenditExtensionCreateInvoice on Xendit {
     required String xenditApiKey,
     Map<String, String>? headers,
   }) async {
-    final Map jsonData = {
-      "external_id": external_id,
-      "amount": amount,
-      "description": description,
-      "payer_email": payer_email,
-      "customer": customer,
-      "customer_notification_preference": customer_notification_preference,
-      "invoice_duration": invoice_duration,
-      "success_redirect_url": success_redirect_url,
-      "failure_redirect_url": failure_redirect_url,
-      "payment_methods": payment_methods,
-      "currency": currency,
-      "fixed_va": fixed_va,
-      "callback_virtual_account_id": callback_virtual_account_id,
-      "mid_label": mid_label,
-      "reminder_time_unit": reminder_time_unit,
-      "reminder_time": reminder_time,
-      "locale": locale,
-      "items": items,
-      "fees": fees,
-      "should_authenticate_credit_card": should_authenticate_credit_card,
-    };
-    return await invokeBuilder(
-      endpoint: "POST https://api.xendit.co/v2/invoices",
-      xenditApiKey: xenditApiKey,
-      headers: {
-        "for-user-id": forUserId,
-        "with-fee-rule": withFeeRule,
-        ...(headers ?? {}),
-      },
-      parameters: jsonData,
-      onResult: (result) {
-        if (result["@type"] == "ok") {
-          result["@type"] = "invoice";
-        }
-        return Invoice(result);
-      },
+    return await invokeRaw<Invoice>(
+      parameters: XenditInvokeParameters(
+        endpoint: "POST https://api.xendit.co/v2/invoices",
+        xenditApiKey: xenditApiKey,
+        headers: {
+          "for-user-id": forUserId,
+          "with-fee-rule": withFeeRule,
+          ...(headers ?? {}),
+        },
+        parameters: {
+          "external_id": external_id,
+          "amount": amount,
+          "description": description,
+          "payer_email": payer_email,
+          "customer": customer,
+          "customer_notification_preference": customer_notification_preference,
+          "invoice_duration": invoice_duration,
+          "success_redirect_url": success_redirect_url,
+          "failure_redirect_url": failure_redirect_url,
+          "payment_methods": payment_methods,
+          "currency": currency,
+          "fixed_va": fixed_va,
+          "callback_virtual_account_id": callback_virtual_account_id,
+          "mid_label": mid_label,
+          "reminder_time_unit": reminder_time_unit,
+          "reminder_time": reminder_time,
+          "locale": locale,
+          "items": items,
+          "fees": fees,
+          "should_authenticate_credit_card": should_authenticate_credit_card,
+        },
+        queryParameters: {},
+        specialTypeSucces: "invoice",
+        isThrowOnError: false,
+        builder: (result) {
+          return Invoice(result);
+        },
+      ),
     );
   }
 }

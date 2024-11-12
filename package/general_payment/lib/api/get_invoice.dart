@@ -10,7 +10,7 @@ extension GeneralPaymentExtensiongetInvoice on GeneralPayment {
     required String invoice_id,
     required GeneralPaymentAuth generalPaymentAuth,
   }) async {
-    return await invokeBuilder(
+    return await paymentInvokeBuilder(
       generalPaymentAuth: generalPaymentAuth,
       onXendit: (generalPaymentAuth) async {
         final result = await xendit.getInvoice(

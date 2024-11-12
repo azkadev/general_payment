@@ -38,127 +38,70 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:general_lib/general_lib.dart';
-import 'package:http/http.dart';
-import 'package:general_payment/package/xendit/extension/map.dart';
-import 'package:general_payment/package/xendit/scheme/respond_scheme/respond_scheme.dart';
+import 'package:general_payment/extension/map.dart';
+import 'package:general_payment/general_payment.dart';
+ import 'package:general_payment/package/xendit/scheme/respond_scheme/respond_scheme.dart';
 
 /// xendit helo world heo gais
-class Xendit { 
-  late final Client http_client;
+class Xendit extends GeneralPaymentCore {
+  Xendit({
+    required super.onGeneralPayment,
+  });
 
-  Xendit({ 
-    Client? httpClient,
-  }) {
-    if (httpClient == null) {
-      http_client = Client();
-    } else {
-      http_client = httpClient;
-    }
-  }
+  static final RegExp regExp_http_method = RegExp(r"^(get|post|patch)([ ]+)?", caseSensitive: false);
 
   /// request method support all update
-  FutureOr<Map> invokeRaw({
-    /// GET https://api.xendit.co/v2/invoices/{invoice_id}
-    required String endpoint,
-    required Map parameters,
-    required Map<String, String> headers,
-    required Map<String, String> queryParameters,
-    required String xenditApiKey,
-    required Client httpClient,
-    required String specialTypeSucces,
+  FutureOr<T> invokeRaw<T>({
+    required XenditInvokeParameters<T> parameters,
+    // /// GET https://api.xendit.co/v2/invoices/{invoice_id}
   }) async {
-    parameters.extension_xendit_removeValueEmptyOrNull();
-    final RegExp regExp_http_method = RegExp(r"^(get|post|patch)([ ]+)?", caseSensitive: false);
-    final String methodRequest = (regExp_http_method.stringMatch(endpoint) ?? "get").toLowerCase().replaceAll(RegExp(r"([ ]+)?", caseSensitive: false), "").trim();
+    parameters.parameters.extension_general_payment_removeValueEmptyOrNull();
+    final String methodRequest = (regExp_http_method.stringMatch(parameters.endpoint) ?? "get").toLowerCase().replaceAll(RegExp(r"([ ]+)?", caseSensitive: false), "").trim();
 
-    final Uri urlApi = Uri.parse(endpoint.replaceAll(regExp_http_method, "")).replace(queryParameters: queryParameters);
-
-    final Map<String, String> headersOption = <String, String>{
-      "Authorization": "Basic ${base64.encode(utf8.encode("${xenditApiKey}:"))}",
+    final Map<String, String> requestHeaders = <String, String>{
+      "Authorization": "Basic ${base64.encode(utf8.encode("${parameters.xenditApiKey}:"))}",
       "Content-Type": 'application/json',
-      ...headers,
     };
-    final Response result = await Future(() async {
-      if (methodRequest == "get") {
-        return await httpClient.get(urlApi, headers: headersOption);
-      } else if (methodRequest == "post") {
-        return await httpClient.post(urlApi, headers: headersOption, body: json.encode(parameters));
-      } else if (methodRequest == "patch") {
-        return await httpClient.patch(urlApi, headers: headersOption, body: json.encode(parameters));
-      } else {
-        return await httpClient.get(urlApi, headers: headersOption);
-      }
-    });
-    final Map body = {
-      "@type": specialTypeSucces,
-    };
-    if (result.statusCode != 200) {
-      body["@type"] = "error";
-    }
-    final String raw_data = result.body;
-    try {
-      final dynamic data = (json.decode(raw_data));
-      if (data is List) {
-        final String snake_key = specialTypeSucces.snakeCaseClass();
-        body["total_count"] = data.length;
-        if (RegExp(r"(s)$", caseSensitive: false).hashData(snake_key)) {
-          body["${snake_key}s"] = data;
-        } else {
-          body[snake_key] = data;
-        }
-      } else {
-        body.addAll(data);
-      }
-    } catch (e, stack) {
-      body.addAll({
-        "message": "${raw_data}",
-      });
-    }
-    return body;
-  }
 
-  /// request method support all update
-  FutureOr<Map> invoke({
-    /// GET https://api.xendit.co/v2/invoices/{invoice_id}
-    required String endpoint,
-    Map? parameters,
-    Map<String, String>? headers,
-    Map<String, String>? queryParameters,
-    required String xenditApiKey,
-    Client? httpClient,
-    String specialTypeSucces = "ok",
-  }) async {
-    return await invokeRaw(
-      endpoint: endpoint,
-      parameters: parameters ?? {},
-      headers: headers ?? {},
-      queryParameters: queryParameters ?? {},
-      xenditApiKey: xenditApiKey,
-      httpClient: httpClient ?? http_client,
-      specialTypeSucces: specialTypeSucces,
+    generalPayment.utilsAddHeaders(headers: requestHeaders, newHeaders: parameters.headers);
+    return await invokeBuilder<T>(
+      parameters: GeneralPaymentInvokeParameters(
+        url: parameters.endpoint.replaceAll(regExp_http_method, ""),
+        isThrowOnError: true,
+        queryParameters: parameters.queryParameters,
+        headers: requestHeaders,
+        method: methodRequest,
+        parameters: parameters.parameters,
+        builder: (response) {
+          final Map body = {
+            "@type": parameters.specialTypeSucces,
+          };
+          if (response.statusCode != 200) {
+            body["@type"] = "error";
+          }
+          final String raw_data = response.body;
+          try {
+            final dynamic data = (json.decode(raw_data));
+            if (data is List) {
+              final String snake_key = parameters.specialTypeSucces.snakeCaseClass();
+              body["total_count"] = data.length;
+              if (RegExp(r"(s)$", caseSensitive: false).hashData(snake_key)) {
+                body["${snake_key}s"] = data;
+              } else {
+                body[snake_key] = data;
+              }
+            } else {
+              body.addAll(data);
+            }
+          } catch (e, stack) {
+            body.addAll({
+              "message": "${raw_data}",
+            });
+          }
+          return parameters.builder(body);
+        },
+      ),
     );
-  }
-
-  FutureOr<T> invokeBuilder<T>({
-    /// GET https://api.xendit.co/v2/invoices/{invoice_id}
-    required String endpoint,
-    Map? parameters,
-    Map<String, String>? headers,
-    Map<String, String>? queryParameters,
-    required String xenditApiKey,
-    Client? httpClient,
-    String specialTypeSucces = "ok",
-    required FutureOr<T> Function(Map result) onResult,
-  }) async {
-    return await onResult(await invoke(
-      endpoint: endpoint,
-      parameters: parameters,
-      headers: headers,
-      queryParameters: queryParameters,
-      xenditApiKey: xenditApiKey,
-      httpClient: httpClient,
-      specialTypeSucces: specialTypeSucces,
-    ));
   }
 
   Future<TransactionBalanceAccount> transferBalanceAccount({
@@ -166,39 +109,48 @@ class Xendit {
     required int amount,
     required String source_user_id,
     required String destination_user_id,
-      required String xenditApiKey,
-
+    required String xenditApiKey,
     Map<String, String>? headers,
   }) async {
-    return await invokeBuilder(
-      endpoint: "POST https://api.xendit.co/transfers",
-      parameters: {
-        "reference": reference,
-        "amount": amount,
-        "source_user_id": source_user_id,
-        "destination_user_id": destination_user_id,
-      },
-      headers: headers,
-      xenditApiKey: xenditApiKey,
-      onResult: (result) {
-        return TransactionBalanceAccount(result);
-      },
+    return await invokeRaw<TransactionBalanceAccount>(
+      parameters: XenditInvokeParameters(
+        endpoint: "POST https://api.xendit.co/transfers",
+        parameters: {
+          "reference": reference,
+          "amount": amount,
+          "source_user_id": source_user_id,
+          "destination_user_id": destination_user_id,
+        },
+        headers: headers,
+        xenditApiKey: xenditApiKey,
+        specialTypeSucces: "transactionBalanceAccount",
+        isThrowOnError: false,
+        queryParameters: {},
+        builder: (result) {
+          return TransactionBalanceAccount(result);
+        },
+      ),
     );
   }
 
   Future<TransactionBalanceAccount> getTransferBalanceAccount({
     required String reference,
     Map<String, String>? headers,
-      required String xenditApiKey,
-
+    required String xenditApiKey,
   }) async {
-    return await invokeBuilder(
-      endpoint: "GET https://api.xendit.co/transfers/reference=${reference}",
-      headers: headers,
-      xenditApiKey: xenditApiKey,
-      onResult: (result) {
-        return TransactionBalanceAccount(result);
-      },
+    return await invokeRaw<TransactionBalanceAccount>(
+      parameters: XenditInvokeParameters(
+        endpoint: "GET https://api.xendit.co/transfers/reference=${reference}",
+        parameters: {},
+        headers: headers,
+        xenditApiKey: xenditApiKey,
+        specialTypeSucces: "transactionBalanceAccount",
+        isThrowOnError: false,
+        queryParameters: {},
+        builder: (result) {
+          return TransactionBalanceAccount(result);
+        },
+      ),
     );
   }
 
@@ -206,23 +158,72 @@ class Xendit {
     required String name,
     required String description,
     required List<Map> routes,
-      required String xenditApiKey,
-
+    required String xenditApiKey,
     Map<String, String>? headers,
   }) async {
-    final Map jsonData = {
-      "name": name,
-      "description": description,
-      "routes": routes,
-    };
-    return await invokeBuilder(
-      endpoint: "POST https://api.xendit.co/fee_rules",
-      parameters: jsonData,
-      headers: headers,
-      xenditApiKey: xenditApiKey,
-      onResult: (result) {
-        return TransactionBalanceAccount(result);
-      },
+    return await invokeRaw<TransactionBalanceAccount>(
+      parameters: XenditInvokeParameters(
+        endpoint: "POST https://api.xendit.co/fee_rules",
+        parameters: {
+          "name": name,
+          "description": description,
+          "routes": routes,
+        },
+        headers: headers,
+        xenditApiKey: xenditApiKey,
+        specialTypeSucces: "transactionBalanceAccount",
+        isThrowOnError: false,
+        queryParameters: {},
+        builder: (result) {
+          return TransactionBalanceAccount(result);
+        },
+      ),
+    );
+  }
+}
+
+class XenditInvokeParameters<T> {
+  /// GET https://api.xendit.co/v2/invoices/{invoice_id}
+  final String endpoint;
+  final Map<String, dynamic>? queryParameters;
+
+  final String xenditApiKey;
+  final String specialTypeSucces;
+  final Map? headers;
+  final Map parameters;
+  final bool isThrowOnError;
+  final FutureOr<T> Function(Map result) builder;
+  const XenditInvokeParameters({
+    required this.endpoint,
+    required this.xenditApiKey,
+    required this.specialTypeSucces,
+    required this.isThrowOnError,
+    required this.queryParameters,
+    required this.headers,
+    required this.parameters,
+    required this.builder,
+  });
+
+  XenditInvokeParameters copyWith({
+    String? endpoint,
+    String? xenditApiKey,
+    String? specialTypeSucces,
+    bool? isThrowOnError,
+    Map<String, dynamic>? queryParameters,
+    Map<dynamic, dynamic>? headers,
+    String? method,
+    Map<dynamic, dynamic>? parameters,
+    FutureOr<T> Function(Map result)? builder,
+  }) {
+    return XenditInvokeParameters(
+      queryParameters: queryParameters ?? this.queryParameters,
+      isThrowOnError: isThrowOnError ?? this.isThrowOnError,
+      headers: headers ?? this.headers,
+      parameters: parameters ?? this.parameters,
+      builder: builder ?? this.builder,
+      endpoint: endpoint ?? this.endpoint,
+      xenditApiKey: xenditApiKey ?? this.xenditApiKey,
+      specialTypeSucces: specialTypeSucces ?? this.specialTypeSucces,
     );
   }
 }
