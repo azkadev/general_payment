@@ -36,7 +36,7 @@ extension GeneralPaymentExtensiongetInvoice on GeneralPayment {
       onUnknown: (generalPaymentAuth) {
         return Invoice({
           "@type": "error",
-          "message": "unimplemented",
+          "message": "payment_gateway_auth_type_bad_format",
         });
       },
     );
