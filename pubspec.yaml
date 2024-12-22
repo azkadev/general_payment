@@ -28,7 +28,7 @@ dependencies:
   yaml_edit: '^2.2.0'
   yaml_writer: '^2.0.0'
 dev_dependencies:
-  lints: '^4.0.0'
+  lints: '^5.0.0'
   test: 'any'
 publish_to: 'none'
 dependency_overrides:
