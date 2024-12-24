@@ -1,3 +1,3 @@
-## 1.0.0
+## 0.0.1
 
-- Initial version.
+- A Standarization All Payment Library for easy use any payment gateway in any project.

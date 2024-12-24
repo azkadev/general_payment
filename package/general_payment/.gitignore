@@ -23,6 +23,6 @@ linux/flutter/ephemeral
 macos/Flutter/ephemeral
 windows/ephemeral
 tmp/
-temp/
-
+temp/ 
 bin/
+temp/
