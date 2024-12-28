@@ -9,13 +9,13 @@ extension XenditExtensionGetInvoiceByExternalId on Xendit {
   }) async {
     return await invokeRaw(
       parameters: XenditInvokeParameters(
-        endpoint: "GET https://api.xendit.co/v2/invoices/?external_id=$external_id",
+        endpoint:
+            "GET https://api.xendit.co/v2/invoices/?external_id=$external_id",
         xenditApiKey: xenditApiKey,
         headers: {
           "for-user-id": forUserId,
         },
         builder: (result) {
-
           return Invoice(result);
         },
         specialTypeSucces: "invoice",

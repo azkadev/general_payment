@@ -5,16 +5,15 @@ extension XenditExtensionGetInvoices on Xendit {
   Future<Invoices> getInvoices({
     String forUserId = "",
     required String xenditApiKey,
-  }) async { 
+  }) async {
     return await invokeRaw(
       parameters: XenditInvokeParameters(
-      endpoint: "GET https://api.xendit.co/v2/invoices",
-      xenditApiKey: xenditApiKey,
-      headers: {
-        "for-user-id": forUserId,
-      },
+        endpoint: "GET https://api.xendit.co/v2/invoices",
+        xenditApiKey: xenditApiKey,
+        headers: {
+          "for-user-id": forUserId,
+        },
         builder: (result) {
-
           return Invoices(result);
         },
         specialTypeSucces: "invoices",

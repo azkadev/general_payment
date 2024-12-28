@@ -8,7 +8,7 @@ extension XenditExtensioncreateAccount on Xendit {
     required String bussiness_name,
     required String xenditApiKey,
     Map<String, String>? headers,
-  }) async { 
+  }) async {
     return await invokeRaw<Account>(
       parameters: XenditInvokeParameters(
         endpoint: "POST https://api.xendit.co/v2/accounts",

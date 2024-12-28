@@ -8,20 +8,19 @@ extension XenditExtensioncreatePayOutLink on Xendit {
     required int amount,
     required String email,
     required String xenditApiKey,
-  }) async { 
+  }) async {
     return await invokeRaw<PayOutLink>(
       parameters: XenditInvokeParameters(
-        
-      endpoint: "POST https://api.xendit.co/payouts",
-      xenditApiKey: xenditApiKey,
-      headers: {
-        "for-user-id": forUserId,
-      },
-      parameters: {
-        "external_id": external_id,
-        "amount": amount,
-        "email": email,
-      },
+        endpoint: "POST https://api.xendit.co/payouts",
+        xenditApiKey: xenditApiKey,
+        headers: {
+          "for-user-id": forUserId,
+        },
+        parameters: {
+          "external_id": external_id,
+          "amount": amount,
+          "email": email,
+        },
         queryParameters: {},
         specialTypeSucces: "payOutLink",
         isThrowOnError: false,

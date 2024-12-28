@@ -40,7 +40,7 @@ import 'dart:convert';
 import 'package:general_lib/general_lib.dart';
 import 'package:general_payment/extension/map.dart';
 import 'package:general_payment/general_payment.dart';
- import 'package:general_payment/package/xendit/scheme/respond_scheme/respond_scheme.dart';
+import 'package:general_payment/package/xendit/scheme/respond_scheme/respond_scheme.dart';
 
 /// xendit helo world heo gais
 class Xendit extends GeneralPaymentCore {
@@ -48,7 +48,8 @@ class Xendit extends GeneralPaymentCore {
     required super.onGeneralPayment,
   });
 
-  static final RegExp regExp_http_method = RegExp(r"^(get|post|patch)([ ]+)?", caseSensitive: false);
+  static final RegExp regExp_http_method =
+      RegExp(r"^(get|post|patch)([ ]+)?", caseSensitive: false);
 
   /// request method support all update
   FutureOr<T> invokeRaw<T>({
@@ -56,14 +57,20 @@ class Xendit extends GeneralPaymentCore {
     // /// GET https://api.xendit.co/v2/invoices/{invoice_id}
   }) async {
     parameters.parameters.extension_general_payment_removeValueEmptyOrNull();
-    final String methodRequest = (regExp_http_method.stringMatch(parameters.endpoint) ?? "get").toLowerCase().replaceAll(RegExp(r"([ ]+)?", caseSensitive: false), "").trim();
+    final String methodRequest =
+        (regExp_http_method.stringMatch(parameters.endpoint) ?? "get")
+            .toLowerCase()
+            .replaceAll(RegExp(r"([ ]+)?", caseSensitive: false), "")
+            .trim();
 
     final Map<String, String> requestHeaders = <String, String>{
-      "Authorization": "Basic ${base64.encode(utf8.encode("${parameters.xenditApiKey}:"))}",
+      "Authorization":
+          "Basic ${base64.encode(utf8.encode("${parameters.xenditApiKey}:"))}",
       "Content-Type": 'application/json',
     };
 
-    generalPayment.utilsAddHeaders(headers: requestHeaders, newHeaders: parameters.headers);
+    generalPayment.utilsAddHeaders(
+        headers: requestHeaders, newHeaders: parameters.headers);
     return await invokeBuilder<T>(
       parameters: GeneralPaymentInvokeParameters(
         url: parameters.endpoint.replaceAll(regExp_http_method, ""),
@@ -83,7 +90,8 @@ class Xendit extends GeneralPaymentCore {
           try {
             final dynamic data = (json.decode(raw_data));
             if (data is List) {
-              final String snake_key = parameters.specialTypeSucces.snakeCaseClass();
+              final String snake_key =
+                  parameters.specialTypeSucces.snakeCaseClass();
               body["total_count"] = data.length;
               if (RegExp(r"(s)$", caseSensitive: false).hashData(snake_key)) {
                 body["${snake_key}s"] = data;

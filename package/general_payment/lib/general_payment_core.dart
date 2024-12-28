@@ -206,4 +206,5 @@ class GeneralPayment implements GeneralPaymentCore {
   );
 }
 
-typedef InvokeFunctionBuilder<T> = FutureOr<T> Function(GeneralPaymentAuth generalPaymentAuth);
+typedef InvokeFunctionBuilder<T> = FutureOr<T> Function(
+    GeneralPaymentAuth generalPaymentAuth);

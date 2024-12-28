@@ -1,3 +1,1 @@
-final List<Map<String, dynamic>> api_schemes = [
-  
-];
+final List<Map<String, dynamic>> api_schemes = [];

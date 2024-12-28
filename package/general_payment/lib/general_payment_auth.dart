@@ -21,7 +21,8 @@ class GeneralPaymentAuth {
     required String paymentGatewayApiKey,
     required String paymentGatewayOwnerId,
   }) {
-    if (RegExp(r"^(xnd_(development|production)_)", caseSensitive: false).hasMatch(paymentGatewayApiKey)) {
+    if (RegExp(r"^(xnd_(development|production)_)", caseSensitive: false)
+        .hasMatch(paymentGatewayApiKey)) {
       return GeneralPaymentAuth.xendit(
         xenditOwnerId: paymentGatewayOwnerId,
         xenditApiKey: paymentGatewayApiKey,

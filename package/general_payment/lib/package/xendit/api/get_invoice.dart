@@ -6,16 +6,15 @@ extension XenditExtensionGetInvoice on Xendit {
     String forUserId = "",
     required String invoice_id,
     required String xenditApiKey,
-  }) async { 
+  }) async {
     return await invokeRaw(
       parameters: XenditInvokeParameters(
-      endpoint: "GET https://api.xendit.co/v2/invoices/$invoice_id",
-      xenditApiKey: xenditApiKey,
-      headers: {
-        "for-user-id": forUserId,
-      },
+        endpoint: "GET https://api.xendit.co/v2/invoices/$invoice_id",
+        xenditApiKey: xenditApiKey,
+        headers: {
+          "for-user-id": forUserId,
+        },
         builder: (result) {
-
           return Invoice(result);
         },
         specialTypeSucces: "invoice",

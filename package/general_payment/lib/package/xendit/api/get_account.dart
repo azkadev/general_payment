@@ -6,7 +6,7 @@ extension XenditExtensiongetAccount on Xendit {
     required String id,
     required String xenditApiKey,
     Map<String, String>? headers,
-  }) async { 
+  }) async {
     return await invokeRaw<Account>(
       parameters: XenditInvokeParameters(
         endpoint: "GET https://api.xendit.co/v2/accounts/$id",
@@ -18,7 +18,7 @@ extension XenditExtensiongetAccount on Xendit {
         parameters: {},
         queryParameters: {},
         specialTypeSucces: "account",
-        isThrowOnError: false, 
+        isThrowOnError: false,
       ),
     );
   }

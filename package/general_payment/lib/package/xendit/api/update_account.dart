@@ -8,25 +8,22 @@ extension XenditExtensionupdateAccount on Xendit {
     required String bussiness_name,
     Map<String, String>? headers,
     required String xenditApiKey,
-  }) async { 
-    
+  }) async {
     return await invokeRaw(
       parameters: XenditInvokeParameters(
-        
-      endpoint: "PATCH https://api.xendit.co/v2/accounts/{id}",
-      xenditApiKey: xenditApiKey,
-      parameters: {
-        "email": email,
-        "public_profile": {
-          "business_name": bussiness_name,
+        endpoint: "PATCH https://api.xendit.co/v2/accounts/{id}",
+        xenditApiKey: xenditApiKey,
+        parameters: {
+          "email": email,
+          "public_profile": {
+            "business_name": bussiness_name,
+          },
         },
-      },
-      headers: headers,
-      builder: (result) {
-        return Account(result);
-      },
+        headers: headers,
+        builder: (result) {
+          return Account(result);
+        },
         specialTypeSucces: "account",
-
         queryParameters: {},
         isThrowOnError: false,
       ),

@@ -6,17 +6,17 @@ extension XenditExtensiongetPayOutLinkById on Xendit {
     String forUserId = "",
     required String id,
     required String xenditApiKey,
-  }) async { 
+  }) async {
     return await invokeRaw(
       parameters: XenditInvokeParameters(
-      endpoint: "GET https://api.xendit.co/payouts/$id",
-      xenditApiKey: xenditApiKey,
-      headers: {
-        "for-user-id": forUserId,
-      },
-      builder: (result) {
-        return PayOutLink(result);
-      },
+        endpoint: "GET https://api.xendit.co/payouts/$id",
+        xenditApiKey: xenditApiKey,
+        headers: {
+          "for-user-id": forUserId,
+        },
+        builder: (result) {
+          return PayOutLink(result);
+        },
         specialTypeSucces: "payOutLink",
         parameters: {},
         queryParameters: {},
