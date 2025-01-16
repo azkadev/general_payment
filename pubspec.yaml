@@ -19,9 +19,9 @@ platforms:
 environment:
   sdk: '>=3.6.0 <4.0.0'
 dependencies:
-  general_lib: '^0.0.61'
+  general_lib: '^0.0.62'
   mason_logger: '^0.3.1'
-  packagex: '^0.0.84'
+  packagex: '^0.0.85'
   path: '^1.9.0'
   universal_io: '^2.2.2'
   yaml: '^3.1.3'
